@@ -1,0 +1,68 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Eudoxus Sans", sans-serif;
+  scroll-behavior: smooth;
+}
+
+.gradient-01 {
+  position: absolute;
+  width: 200px;
+  height: 438px;
+  top: 0px;
+  right: 0px;
+
+  background: #7aebfb;
+  filter: blur(190px);
+}
+
+.gradient-02 {
+  position: absolute;
+  width: 404px;
+  height: 800px;
+  left: 20%;
+  top: 5%;
+
+  background: rgba(149, 66, 232, 0.35);
+  filter: blur(175px);
+  transform: rotate(-114.2deg);
+}
+
+.gradient-03 {
+  position: absolute;
+  width: 304px;
+  height: 100vh;
+  left: 30%;
+  top: 10%;
+
+  background: rgba(45, 72, 152, 0.75);
+  filter: blur(200px);
+  transform: rotate(-53.13deg);
+}
+
+.pricing-gradient {
+  position: absolute;
+  width: 200px;
+  height: 316px;
+  left: 0px;
+  top: 0px;
+
+  background: #32a59d;
+  filter: blur(175px);
+}
+
+.footer-gradient {
+  position: absolute;
+  width: 500px;
+  height: 100px;
+  left: 37%;
+  bottom: 0;
+
+  background: #65c4fa;
+  filter: blur(150px);
+}

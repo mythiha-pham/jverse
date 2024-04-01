@@ -1,0 +1,42 @@
+{
+  "name": "jverse",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.535.0",
+    "@aws-sdk/client-transcribe": "^3.535.0",
+    "@emailjs/browser": "^4.3.3",
+    "@ffmpeg/ffmpeg": "^0.12.10",
+    "@ffmpeg/util": "^0.12.1",
+    "aws-crt": "^1.21.1",
+    "axios": "^1.6.8",
+    "css-loader": "^6.10.0",
+    "eslint-config-next": "^14.1.3",
+    "file-loader": "^6.2.0",
+    "framer-motion": "^7.6.7",
+    "next": "^14.1.3",
+    "next-nprogress-bar": "^2.3.5",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-scroll": "^1.9.0",
+    "style-loader": "^3.3.4",
+    "uniqid": "^5.4.0"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.13",
+    "eslint": "^8.27.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "postcss": "^8.4.19",
+    "tailwindcss": "^3.4.3"
+  }
+}

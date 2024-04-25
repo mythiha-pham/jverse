@@ -25,8 +25,8 @@ export function cleanUpTranscription(items) {
  * @param {String} timeString - a time string in seconds
  * @returns {String} - a formatted time string in HH:MM:SS,MS format
  */
-function secondsToHHMMSSMSFormat(timeString) {
-  const totalSeconds = parseFloat(timeString);
+function secondsToHHMMSSMSFormat(timeString, minDuration = 0.05) {
+  const totalSeconds = parseFloat(timeString) + minDuration;
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);

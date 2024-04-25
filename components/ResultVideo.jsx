@@ -24,6 +24,8 @@ export default function ResultVideo({ filename, transcriptionItems }) {
   const ffmpegRef = useRef(new FFmpeg());
   const videoRef = useRef(null);
 
+  const [videoUrl, setVideoUrl] = useState('');
+
   // colors, fonts and positon states
   const [primaryColor, setPrimaryColor] = useState('#FFFFFF');
   const [outlineColor, setOutlineColor] = useState('#000000');
@@ -122,8 +124,18 @@ export default function ResultVideo({ filename, transcriptionItems }) {
 
     const data = await ffmpeg.readFile('result.mp4');
     videoRef.current.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
+    setVideoUrl(videoRef.current.src);
 
     setProgress(1);
+  };
+
+  const download = () => {
+    const video = document.createElement('video');
+    video.href = videoUrl;
+    video.download = 'result.mp4';
+    document.body.appendChild(video);
+    video.click();
+    document.body.removeChild(video);
   };
 
   return (
@@ -217,15 +229,18 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         )}
         {/* Video */}
         <div className="flex justify-center items-center">
-          <video className="w-[50%] h-[50%]" ref={videoRef} controls>
+          <video ref={videoRef} controls>
             <track kind="captions" />
           </video>
         </div>
       </div>
       {/* Apply captions button */}
-      <div className="mt-4 flex justify-center items-center">
+      <div className="mt-4 flex justify-between items-center ">
         <button type="button" onClick={transcode} className={`${styles.button}`}>
           Apply captions
+        </button>
+        <button type="button" onClick={download} className={`${styles.button}`}>
+          Download
         </button>
       </div>
     </>

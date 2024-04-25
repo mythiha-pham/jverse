@@ -14,6 +14,12 @@ export default function UploadForm() {
     const { files } = e.target;
     if (files.length > 0) {
       const file = files[0];
+      // Check if the file size exceeds 1GB
+      const maxSizeBytes = 1073741824; // 1GB in bytes
+      if (file.size > maxSizeBytes) {
+        alert('File size exceeds the limit of 1GB');
+        return;
+      }
       setIsUploading(true);
       const res = await axios.postForm('/api/upload', { file });
       setIsUploading(false);
@@ -41,7 +47,10 @@ export default function UploadForm() {
         </label>
         <div className="mt-4">
           <p className={`${styles.heroSubheading} font-light text-[12px]`}>
-            <span className="text-[#ff6961]">*</span> Supported formats: AMR, FLAC, M4A, MP3, MP4, Ogg, WebM, WAV
+            <span className="text-[#ff6961]">*</span> Supported formats: AMR, FLAC, M4A, MP3, MP4, Ogg, WebM, WAV.
+          </p>
+          <p className={`${styles.heroSubheading} font-light text-[12px] mt-2`}>
+            Size limit: 1GB.
           </p>
         </div>
       </div>

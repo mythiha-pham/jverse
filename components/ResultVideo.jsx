@@ -16,7 +16,7 @@ import roboto from '../fonts/Roboto-Regular.ttf';
 
 /* The ResultVideo component is responsible for displaying the video player and the caption styles manager */
 export default function ResultVideo({ filename, transcriptionItems }) {
-  const videoURL = `https://capto-verse.s3.amazonaws.com/${filename}`;
+  const videoURL = `https://jverse.s3.eu-central-1.amazonaws.com/${filename}`;
 
   // progress state
   const [progress, setProgress] = useState(1);
@@ -42,7 +42,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
 
   // load FFmpeg
   const load = async () => {
-    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.4/dist/umd';
+    const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
     const ffmpeg = ffmpegRef.current;
     await ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),

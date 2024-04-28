@@ -237,11 +237,11 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         <button type="button" onClick={transcode} className={`${styles.button}`}>
           Apply captions
         </button>
-        <button type="button" className={`${styles.button} disabled:pointer-events-none disabled:bg-gray-700 disabled:text-gray-500`} disabled={undownloadable}>
-          <a href={videoUrl} download="result.mp4">
+        <a href={videoUrl} download="result.mp4">
+          <button type="button" className={`${styles.button} disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-500`} disabled={undownloadable} title={undownloadable ? 'Please apply captions before downloading' : ''}>
             Download video
-          </a>
-        </button>
+          </button>
+        </a>
       </div>
     </>
   );

@@ -1,7 +1,6 @@
 'use client';
 
 import '../styles/globals.css';
-import { AppProgressBar as ProgressBar } from 'next-nprogress-bar';
 
 const RootLayout = ({ children }) => (
   <html lang="en">
@@ -11,12 +10,6 @@ const RootLayout = ({ children }) => (
     </head>
     <body>
       {children}
-      <ProgressBar
-        height="4px"
-        color="#76ffff"
-        options={{ showSpinner: false }}
-        shallowRouting
-      />
     </body>
   </html>
 );

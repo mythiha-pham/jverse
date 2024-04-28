@@ -4,7 +4,7 @@ import { streamToString } from '../../../libs/TranscriptionHelper';
 
 /* These following codes are adapted from the AWS SDK for JavaScript documentation.
  * https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/transcribe-examples-section.html
- *create an Amazon Transcribe service client object
+ * create an Amazon Transcribe service client object
  * @returns {TranscribeClient} - the service client object
  */
 function createClient() {

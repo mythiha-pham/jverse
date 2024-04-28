@@ -14,7 +14,10 @@ import montserrat from '../fonts/Montserrat-Regular.ttf';
 import poppins from '../fonts/Poppins-Regular.ttf';
 import roboto from '../fonts/Roboto-Regular.ttf';
 
-/* The ResultVideo component is responsible for displaying the video player and the caption styles manager */
+/* The ResultVideo component is responsible for displaying the video player and the caption styles manager.
+  * It uses the FFmpeg library to apply captions and styles to the video. These following codes are adapted from the FFmpegWasm documentation.
+  * https://ffmpegwasm.netlify.app/docs/getting-started/usage/#display-text-on-the-video
+*/
 export default function ResultVideo({ filename, transcriptionItems }) {
   const videoURL = `https://jverse.s3.eu-central-1.amazonaws.com/${filename}`;
 
@@ -25,6 +28,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
   const videoRef = useRef(null);
 
   const [videoUrl, setVideoUrl] = useState('');
+  const [undownloadable, setUnDownloadable] = useState(true);
 
   // colors, fonts and positon states
   const [primaryColor, setPrimaryColor] = useState('#FFFFFF');
@@ -44,6 +48,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
   const load = async () => {
     const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd';
     const ffmpeg = ffmpegRef.current;
+    // toBlobURL() is used to bypass CORS issue
     await ffmpeg.load({
       coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
       wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
@@ -56,12 +61,6 @@ export default function ResultVideo({ filename, transcriptionItems }) {
     load();
   }, []);
 
-  // convert RGB to FFmpeg color format
-  function toFFmegColor(rgb) {
-    const bgr = rgb.slice(5, 7) + rgb.slice(3, 5) + rgb.slice(1, 3);
-    return `&H${bgr}&`;
-  }
-
   // transcode video with captions and styles applied to it
   const transcode = async () => {
     const ffmpeg = ffmpegRef.current;
@@ -73,15 +72,16 @@ export default function ResultVideo({ filename, transcriptionItems }) {
     await new Promise((resolve) => {
       videoRef.current.onloadedmetadata = resolve;
     });
+
     // update progress bar
     const { duration } = videoRef.current;
     ffmpeg.on('log', ({ message }) => {
       const regexResult = /time=([0-9:.]+)/.exec(message);
       if (regexResult && regexResult?.[1]) {
-        const howMuchIsDone = regexResult?.[1];
-        const [hours, minutes, seconds] = howMuchIsDone.split(':');
-        const doneTotalSeconds = hours * 3600 + minutes * 60 + seconds;
-        const videoProgress = doneTotalSeconds / duration;
+        const timeCompletion = regexResult?.[1];
+        const [hours, minutes, seconds] = timeCompletion.split(':');
+        const timeCompletionInSeconds = hours * 3600 + minutes * 60 + seconds;
+        const videoProgress = timeCompletionInSeconds / duration;
         setProgress(videoProgress);
       }
     });
@@ -114,6 +114,12 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         break;
     }
 
+    // convert RGB to FFmpeg color format
+    function toFFmegColor(rgb) {
+      const bgr = rgb.slice(5, 7) + rgb.slice(3, 5) + rgb.slice(1, 3);
+      return `&H${bgr}&`;
+    }
+
     // apply captions and styles
     await ffmpeg.exec([
       '-i', filename,
@@ -125,17 +131,9 @@ export default function ResultVideo({ filename, transcriptionItems }) {
     const data = await ffmpeg.readFile('result.mp4');
     videoRef.current.src = URL.createObjectURL(new Blob([data.buffer], { type: 'video/mp4' }));
     setVideoUrl(videoRef.current.src);
+    setUnDownloadable(false);
 
     setProgress(1);
-  };
-
-  const download = () => {
-    const video = document.createElement('video');
-    video.href = videoUrl;
-    video.download = 'result.mp4';
-    document.body.appendChild(video);
-    video.click();
-    document.body.removeChild(video);
   };
 
   return (
@@ -239,8 +237,10 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         <button type="button" onClick={transcode} className={`${styles.button}`}>
           Apply captions
         </button>
-        <button type="button" onClick={download} className={`${styles.button}`}>
-          Download
+        <button type="button" className={`${styles.button} disabled:pointer-events-none disabled:bg-gray-700 disabled:text-gray-500`} disabled={undownloadable}>
+          <a href={videoUrl} download="result.mp4">
+            Download video
+          </a>
         </button>
       </div>
     </>

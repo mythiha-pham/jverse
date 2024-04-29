@@ -17,6 +17,7 @@ const styles = {
 
   heroHeading:
       'font-bold text-[44px] leading-[44px] text-white opacity-80',
+
   heroSubheading:
       'text-[15px] leading-[15px] text-gray-400',
 

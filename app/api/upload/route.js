@@ -1,5 +1,6 @@
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
-import uniqid from 'uniqid';
+import { PutObjectCommand } from '@aws-sdk/client-s3';
+import { nanoid } from 'nanoid';
+import { s3client } from '../../../libs/TranscriptionHelper';
 
 /* POST /api/upload
  * @param {FormData} req - the form data containing the file to upload
@@ -15,17 +16,8 @@ export async function POST(req) {
   // read file content
   const data = await file.arrayBuffer();
 
-  // create S3 client
-  const s3client = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
-
   // generate unique name for uploaded file
-  const id = uniqid();
+  const id = nanoid();
   const extension = name.split('.').slice(-1)[0];
   const newName = `${id}.${extension}`;
 

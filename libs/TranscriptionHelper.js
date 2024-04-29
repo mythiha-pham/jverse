@@ -1,3 +1,14 @@
+import { S3Client } from '@aws-sdk/client-s3';
+
+// create S3 client
+export const s3client = new S3Client({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
 /* concatenate the content of an item with missing start_time property to the content of the previous item.
  * remove the current item from the array if it has no start_time.
  * map the modified items into a new array containing only the start_time, end_time, and content properties.

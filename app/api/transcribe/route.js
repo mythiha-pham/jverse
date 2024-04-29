@@ -1,6 +1,6 @@
-import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { GetTranscriptionJobCommand, StartTranscriptionJobCommand, TranscribeClient } from '@aws-sdk/client-transcribe';
-import { streamToString } from '../../../libs/TranscriptionHelper';
+import { streamToString, s3client } from '../../../libs/TranscriptionHelper';
 
 /* These following codes are adapted from the AWS SDK for JavaScript documentation.
  * https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/transcribe-examples-section.html
@@ -68,13 +68,7 @@ async function getJobStatus(filename) {
  */
 async function getTranscriptionFile(filename) {
   const transcriptionFile = `${filename}.transcription`;
-  const s3client = new S3Client({
-    region: process.env.AWS_REGION,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
+
   const getObjectCommand = new GetObjectCommand({
     Bucket: process.env.BUCKET_NAME,
     Key: transcriptionFile,

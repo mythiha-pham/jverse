@@ -1,4 +1,5 @@
 import { S3Client } from '@aws-sdk/client-s3';
+import { TranscribeClient } from '@aws-sdk/client-transcribe';
 
 // create S3 client
 export const s3client = new S3Client({
@@ -9,26 +10,58 @@ export const s3client = new S3Client({
   },
 });
 
-/* concatenate the content of an item with missing start_time property to the content of the previous item.
- * remove the current item from the array if it has no start_time.
- * map the modified items into a new array containing only the start_time, end_time, and content properties.
+// create an Amazon Transcribe service client
+export const transcribeClient = new TranscribeClient({
+  region: process.env.AWS_REGION,
+  credentials: {
+    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
+  },
+});
+
+/* clean up the transcription items by concatenating the content of adjacent items into a single item
+ * e.g., [{ start_time: '0.0', end_time: '1.0', alternatives: [{ content: 'Hello' }] }, { start_time: '1.0', end_time: '2.0', alternatives: [{ content: 'world' }] }], [{ start_time: '', end_time: '', alternatives: [{ content: '!' }] } => [{ start_time: '0.0', end_time: '2.0', content: 'Hello world!' }]
  * @param {Array} items - an array of transcription items
- * @returns {Array} - an array of transcription items with no missing start_time properties
+ * @returns {Array} - an array of cleaned-up transcription items
  */
 export function cleanUpTranscription(items) {
+  // store cleaned-up contents
+  const contents = [];
+  // store current content being processed
+  let currentContent = '';
+  // store the default start time for the current content
+  let start_time_default = '';
+
   items.forEach((item, key) => {
+    // remove the item if it has no start_time
     if (!item.start_time) {
-      const prev_item = items[key - 1];
-      prev_item.alternatives[0].content += item.alternatives[0].content;
       delete items[key];
+      return;
+    }
+    // get the content of the current item
+    const { content } = item.alternatives[0];
+    // if the current content is empty, set the default start time to the start_time of the current item
+    if (!currentContent) {
+      start_time_default = item.start_time;
+    }
+
+    // concatenate the content of the current item with the current content
+    currentContent += (currentContent ? ' ' : '') + content;
+
+    // if the next item has no start_time or it is the last item in the array, add the current content to the contents array
+    if (key === items.length - 1 || !items[key + 1].start_time) {
+      contents.push({
+        start_time: start_time_default,
+        end_time: item.end_time,
+        content: currentContent += items[key + 1].alternatives[0].content,
+      });
+      // reset the current content and default start time for the next content
+      currentContent = '';
+      start_time_default = '';
     }
   });
 
-  return items.map(item => {
-    const { start_time, end_time } = item;
-    const { content } = item.alternatives[0];
-    return { start_time, end_time, content };
-  });
+  return contents;
 }
 
 /* convert a time string in seconds to a formatted string representing the time in HH:MM:SS,MS format
@@ -36,8 +69,8 @@ export function cleanUpTranscription(items) {
  * @param {String} timeString - a time string in seconds
  * @returns {String} - a formatted time string in HH:MM:SS,MS format
  */
-function secondsToHHMMSSMSFormat(timeString, minDuration = 0.05) {
-  const totalSeconds = parseFloat(timeString) + minDuration;
+function secondsToHHMMSSMSFormat(timeString) {
+  const totalSeconds = parseFloat(timeString);
   const hours = Math.floor(totalSeconds / 3600);
   const minutes = Math.floor((totalSeconds % 3600) / 60);
   const seconds = Math.floor(totalSeconds % 60);

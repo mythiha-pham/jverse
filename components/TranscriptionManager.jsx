@@ -17,10 +17,10 @@ export default function TranscriptionEditor({
 
   return (
     <>
-      <div className="grid grid-cols-3 sticky top-0 bg-gradient-to-r from-gray-900 to-cyan-700 p-2 rounded-md text-white">
-        <div className="text-md leading-6 text-white font-semibold text-center">From</div>
-        <div className="text-md leading-6 text-white font-semibold text-center">End</div>
-        <div className="text-md leading-6 text-white font-semibold text-center">Content</div>
+      <div className="grid grid-cols-7 grid-auto-columns sticky top-0 bg-gradient-to-r from-gray-900 to-cyan-700 p-2 rounded-md text-white">
+        <div className="text-md leading-6 text-white font-semibold col-span-1">From</div>
+        <div className="text-md leading-6 text-white font-semibold col-span-1">End</div>
+        <div className="text-md leading-6 text-white font-semibold col-span-5">Content</div>
       </div>
       {awsTranscriptionItems.length > 0 && (
         <div className="sm:h-[600px] overflow-y-scroll sm:overflow-auto">
@@ -56,19 +56,19 @@ export function TranscriptionItem({
     return '';
   }
   return (
-    <div className="my-1 grid grid-cols-3 gap-1 items-center">
+    <div className="my-1 grid grid-cols-7 gap-1 items-center">
       <input type="text"
-        className="bg-white/20 p-1 rounded-md text-white text-center"
+        className="bg-white/20 p-1 rounded-md text-white col-span-1"
         value={item.start_time}
         onChange={handleStartTimeChange}
       />
       <input type="text"
-        className="bg-white/20 p-1 rounded-md text-white text-center"
+        className="bg-white/20 p-1 rounded-md text-white col-span-1"
         value={item.end_time}
         onChange={handleEndTimeChange}
       />
       <input type="text"
-        className="bg-white/20 p-1 rounded-md text-white text-center"
+        className="bg-white/20 p-1 rounded-md text-white col-span-5"
         value={item.content}
         onChange={handleContentChange}
       />

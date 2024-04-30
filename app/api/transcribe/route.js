@@ -1,21 +1,10 @@
 import { GetObjectCommand } from '@aws-sdk/client-s3';
-import { GetTranscriptionJobCommand, StartTranscriptionJobCommand, TranscribeClient } from '@aws-sdk/client-transcribe';
-import { streamToString, s3client } from '../../../libs/TranscriptionHelper';
+import { GetTranscriptionJobCommand, StartTranscriptionJobCommand } from '@aws-sdk/client-transcribe';
+import { streamToString, s3client, transcribeClient } from '../../../libs/TranscriptionHelper';
 
 /* These following codes are adapted from the AWS SDK for JavaScript documentation.
  * https://docs.aws.amazon.com/sdk-for-javascript/v3/developer-guide/transcribe-examples-section.html
- * create an Amazon Transcribe service client object
- * @returns {TranscribeClient} - the service client object
  */
-function createClient() {
-  return new TranscribeClient({
-    region: process.env.AWS_REGION,
-    credentials: {
-      accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-      secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
-    },
-  });
-}
 
 /* create a new transcription command
  * @param {String} filename - the name of the file to transcribe
@@ -37,9 +26,7 @@ function startTranscriptionCommand(filename) {
  * @param {String} filename - the name of the file to transcribe
  * @returns {Promise} - the transcription job
  */
-
 async function createTranscriptionJob(filename) {
-  const transcribeClient = createClient();
   const transcriptionCommand = startTranscriptionCommand(filename);
   return transcribeClient.send(transcriptionCommand);
 }
@@ -49,7 +36,6 @@ async function createTranscriptionJob(filename) {
  * @returns {Promise} - the transcription job status
  */
 async function getJobStatus(filename) {
-  const transcribeClient = createClient();
   let jobStatusResult = null;
   try {
     const transcriptionJobStatusCommand = new GetTranscriptionJobCommand({

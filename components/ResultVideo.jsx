@@ -34,7 +34,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
   const [primaryColor, setPrimaryColor] = useState('#FFFFFF');
   const [outlineColor, setOutlineColor] = useState('#000000');
   const [boxColor, setBoxColor] = useState('#000000');
-  const [fontSize, setFontSize] = useState('30');
+  const [fontSize, setFontSize] = useState('15');
   const [font, setFont] = useState('roboto');
   const [verticalMargin, setVerticalMargin] = useState('70');
 

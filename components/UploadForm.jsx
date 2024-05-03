@@ -21,8 +21,9 @@ export default function UploadForm() {
         return;
       }
       // Check if the file type is supported
-      if (file.type !== 'audio/amr' && file.type !== 'audio/flac' && file.type !== 'audio/m4a' && file.type !== 'audio/mp3' && file.type !== 'audio/mp4' && file.type !== 'audio/ogg' && file.type !== 'audio/webm' && file.type !== 'audio/wav') {
+      if (file.type !== 'video/mp4' && file.type !== 'video/ogg' && file.type !== 'video/webm') {
         alert('File format not supported');
+        console.log(file.type);
         return;
       }
       setIsUploading(true);
@@ -52,7 +53,7 @@ export default function UploadForm() {
         </label>
         <div className="mt-4">
           <p className={`${styles.heroSubheading} font-light text-[12px]`}>
-            <span className="text-[#ff6961]">*</span> Supported formats: AMR, FLAC, M4A, MP3, MP4, Ogg, WebM, WAV.
+            <span className="text-[#ff6961]">*</span> Supported formats: MP4, Ogg, WebM
           </p>
           <p className={`${styles.heroSubheading} font-light text-[12px] mt-2`}>
             Size limit: 1GB.

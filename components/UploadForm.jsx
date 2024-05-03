@@ -20,6 +20,11 @@ export default function UploadForm() {
         alert('File size exceeds the limit of 1GB');
         return;
       }
+      // Check if the file type is supported
+      if (file.type !== 'audio/amr' && file.type !== 'audio/flac' && file.type !== 'audio/m4a' && file.type !== 'audio/mp3' && file.type !== 'audio/mp4' && file.type !== 'audio/ogg' && file.type !== 'audio/webm' && file.type !== 'audio/wav') {
+        alert('File format not supported');
+        return;
+      }
       setIsUploading(true);
       const res = await axios.postForm('/api/upload', { file });
       setIsUploading(false);

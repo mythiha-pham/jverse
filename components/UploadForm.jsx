@@ -14,10 +14,10 @@ export default function UploadForm() {
     const { files } = e.target;
     if (files.length > 0) {
       const file = files[0];
-      // Check if the file size exceeds 1GB
-      const maxSizeBytes = 1073741824; // 1GB in bytes
+      // Check if the file size exceeds file size limit
+      const maxSizeBytes = 4500000; // 4.5MB in bytes
       if (file.size > maxSizeBytes) {
-        alert('File size exceeds the limit of 1GB');
+        alert('File size exceeds the limit of 4.5MB');
         return;
       }
       // Check if the file type is supported
@@ -44,7 +44,7 @@ export default function UploadForm() {
           </div>
         </div>
       )}
-      <div className="border-4 border-dashed border-[#76FFFF] border-opacity-50 hover:border-opacity-100 rounded-md p-[120px] w-[500px] mx-auto flex flex-col items-center">
+      <div className="border-4 border-dashed border-[#76FFFF] border-opacity-50 hover:border-opacity-100 rounded-md p-[120px] w-[800px] mx-auto flex flex-col items-center">
         <p className={`${styles.heroSubheading} font-semibold text-[16px] mb-4`}>Choose your file to upload</p>
         <label className={`${styles.button} flex gap-2 cursor-pointer`}>
           <img src="/upload.png" alt="upload" width={25} height={25} />
@@ -53,10 +53,13 @@ export default function UploadForm() {
         </label>
         <div className="mt-4">
           <p className={`${styles.heroSubheading} font-light text-[12px]`}>
-            <span className="text-[#ff6961]">*</span> Supported formats: MP4, Ogg, WebM
+            <span className="text-[#FF6961]">*</span> Supported formats: MP4, Ogg, WebM
           </p>
-          <p className={`${styles.heroSubheading} font-light text-[12px] mt-2`}>
-            Size limit: 1GB.
+          <p className={`${styles.heroSubheading} font-light text-[12px] mt-3`}>
+            Size limit: 4.5MB
+          </p>
+          <p className={`${styles.heroSubheading} font-light text-[12px] text-[#FF6961] mt-3`}>
+            (This website is only for testing purposes. Do not upload sensitive information.)
           </p>
         </div>
       </div>

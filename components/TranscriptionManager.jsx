@@ -18,9 +18,9 @@ export default function TranscriptionEditor({
   return (
     <>
       <div className="grid grid-cols-7 grid-auto-columns sticky top-0 bg-gradient-to-r from-gray-900 to-cyan-700 p-2 rounded-md text-white">
-        <div className="text-md leading-6 text-white font-semibold col-span-1">From</div>
+        <div className="text-md leading-6 text-white font-semibold col-span-1">Start</div>
         <div className="text-md leading-6 text-white font-semibold col-span-1">End</div>
-        <div className="text-md leading-6 text-white font-semibold col-span-5">Content</div>
+        <div className="text-md leading-6 text-white font-semibold col-span-5">Text</div>
       </div>
       {awsTranscriptionItems.length > 0 && (
         <div className="sm:h-[600px] overflow-y-scroll sm:overflow-auto">
